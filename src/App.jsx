@@ -49,7 +49,8 @@ function App() {
     setEditContent(postToEdit.contenuto);
   }
 
-  function handleSave() {
+  function handleSave(e) {
+    e.preventDefault();
     setPosts((prev) =>
       prev.map((post) =>
         post.id === editId
@@ -66,7 +67,17 @@ function App() {
   return (
     <>
       <div className="container mt-5">
-        <Form submitFunction={handleSubmit} title={newTitle} setTitle={(e) => setNewTitle(e.target.value)} content={newContent} setContent={(e) => setNewContent(e.target.value)} submitText={"Aggiungi"} />
+        <div className="mb-5">
+          <Form
+            submitFunction={handleSubmit}
+            title={newTitle}
+            setTitle={(e) => setNewTitle(e.target.value)}
+            content={newContent}
+            setContent={(e) => setNewContent(e.target.value)}
+            submitText={"Aggiungi"}
+            btnStyle={"primary"}
+          />
+        </div>
         <div className="accordion">
           {posts.map((curItem) => (
             <div key={curItem.id} className="accordion-item mb-2">
@@ -88,28 +99,15 @@ function App() {
                 <div className="accordion-collapse collapse show d-flex justify-content-between">
                   {editId === curItem.id ? (
                     <div className="w-100">
-                      <input
-                        type="text"
-                        className="form-control mb-1"
-                        placeholder="Modifica il titolo"
-                        value={editTitle}
-                        onChange={(e) => setEditTitle(e.target.value)}
+                      <Form
+                        submitFunction={handleSave}
+                        title={editTitle}
+                        setTitle={(e) => setEditTitle(e.target.value)}
+                        content={editContent}
+                        setContent={(e) => setEditContent(e.target.value)}
+                        submitText="Salva"
+                        btnStyle={"success mx-auto mb-2"}
                       />
-                      <textarea
-                        type="text"
-                        className="form-control mb-1"
-                        placeholder="Modifica il contenuto"
-                        value={editContent}
-                        onChange={(e) => setEditContent(e.target.value)}
-                      />
-                      <div className="text-center mb-2">
-                        <button
-                          className="btn btn-success mt-2"
-                          onClick={handleSave}
-                        >
-                          Save
-                        </button>
-                      </div>
                     </div>
                   ) : (
                     <div className="accordion-body">{curItem.contenuto}</div>

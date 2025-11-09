@@ -1,6 +1,14 @@
-export default function Form({submitFunction, title, setTitle, content, setContent, submitText}) {
+export default function Form({
+  submitFunction,
+  title,
+  setTitle,
+  content,
+  setContent,
+  submitText,
+  btnStyle,
+}) {
   return (
-    <form action="" className="g-3 mb-5" onSubmit={submitFunction}>
+    <form action="" className="g-3" onSubmit={submitFunction}>
       <input
         type="text"
         className="form-control mb-1"
@@ -15,10 +23,11 @@ export default function Form({submitFunction, title, setTitle, content, setConte
         value={content}
         onChange={setContent}
       />
-
-      <button type="submit" className="btn btn-primary mt-3">
-        {submitText}
-      </button>
+      <div className="d-flex">
+        <button type="submit" className={`btn btn-${btnStyle} mt-3`}>
+          {submitText}
+        </button>
+      </div>
     </form>
   );
 }
