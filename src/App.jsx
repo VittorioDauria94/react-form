@@ -1,5 +1,6 @@
 import { useState } from "react";
 import blogPosts from "./assets/data/blogPosts";
+import Form from "./components/form";
 
 function App() {
   const [newTitle, setNewTitle] = useState("");
@@ -65,26 +66,7 @@ function App() {
   return (
     <>
       <div className="container mt-5">
-        <form action="" className="g-3 mb-5" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            className="form-control mb-1"
-            placeholder="Aggiungi il titolo"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-          />
-          <textarea
-            type="text"
-            className="form-control"
-            placeholder="Aggiungi il contenuto"
-            value={newContent}
-            onChange={(e) => setNewContent(e.target.value)}
-          />
-
-          <button type="submit" className="btn btn-primary mt-3">
-            Aggiungi
-          </button>
-        </form>
+        <Form submitFunction={handleSubmit} title={newTitle} setTitle={(e) => setNewTitle(e.target.value)} content={newContent} setContent={(e) => setNewContent(e.target.value)} submitText={"Aggiungi"} />
         <div className="accordion">
           {posts.map((curItem) => (
             <div key={curItem.id} className="accordion-item mb-2">
@@ -107,12 +89,14 @@ function App() {
                   {editId === curItem.id ? (
                     <div className="w-100">
                       <input
+                        type="text"
                         className="form-control mb-1"
                         placeholder="Modifica il titolo"
                         value={editTitle}
                         onChange={(e) => setEditTitle(e.target.value)}
                       />
                       <textarea
+                        type="text"
                         className="form-control mb-1"
                         placeholder="Modifica il contenuto"
                         value={editContent}
