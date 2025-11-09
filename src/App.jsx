@@ -1,6 +1,7 @@
 import { useState } from "react";
 import blogPosts from "./assets/data/blogPosts";
 import Form from "./components/form";
+import Accordionheader from "./components/AccordionHeader";
 
 function App() {
   const [newTitle, setNewTitle] = useState("");
@@ -81,20 +82,11 @@ function App() {
         <div className="accordion">
           {posts.map((curItem) => (
             <div key={curItem.id} className="accordion-item mb-2">
-              <h2 className="accordion-header d-flex ">
-                <button
-                  className="accordion-button"
-                  type="button"
-                  onClick={() => handleToogle(curItem.id)}
-                >
-                  {curItem.titolo}
-                </button>
-                <i
-                  className="bi bi-trash btn btn-danger align-self-center mx-1"
-                  onClick={() => handleDelete(curItem.id)}
-                ></i>
-              </h2>
-
+              <Accordionheader
+                title={curItem.titolo}
+                toogle={() => handleToogle(curItem.id)}
+                deleteItem={() => handleDelete(curItem.id)}
+              />
               {curItem.read && (
                 <div className="accordion-collapse collapse show d-flex justify-content-between">
                   {editId === curItem.id ? (
