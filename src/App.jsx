@@ -5,9 +5,16 @@ function App() {
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
   const [posts, setPosts] = useState(blogPosts);
+  const [editId, setEditId] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (newTitle.trim() === "") return;
+    if (newContent.trim() === "") return;
+
     const lastIndex = posts.length + 1;
 
     const newPost = {
@@ -29,6 +36,32 @@ function App() {
     );
   }
 
+  function handleDelete(curId) {
+    setPosts((prev) => prev.filter((post) => post.id !== curId));
+  }
+
+  function handleModify(curId) {
+    const postToEdit = posts.find((p) => p.id === curId);
+
+    setEditId(curId);
+    setEditTitle(postToEdit.titolo);
+    setEditContent(postToEdit.contenuto);
+  }
+
+  function handleSave() {
+    setPosts((prev) =>
+      prev.map((post) =>
+        post.id === editId
+          ? { ...post, titolo: editTitle, contenuto: editContent }
+          : post
+      )
+    );
+
+    setEditId(null);
+    setEditTitle("");
+    setEditContent("");
+  }
+
   return (
     <>
       <div className="container mt-5">
@@ -40,7 +73,7 @@ function App() {
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
           />
-          <input
+          <textarea
             type="text"
             className="form-control"
             placeholder="Aggiungi il contenuto"
@@ -55,7 +88,7 @@ function App() {
         <div className="accordion">
           {posts.map((curItem) => (
             <div key={curItem.id} className="accordion-item mb-2">
-              <h2 className="accordion-header">
+              <h2 className="accordion-header d-flex ">
                 <button
                   className="accordion-button"
                   type="button"
@@ -63,10 +96,46 @@ function App() {
                 >
                   {curItem.titolo}
                 </button>
+                <i
+                  className="bi bi-trash btn btn-danger align-self-center mx-1"
+                  onClick={() => handleDelete(curItem.id)}
+                ></i>
               </h2>
+
               {curItem.read && (
-                <div className="accordion-collapse collapse show">
-                  <div className="accordion-body">{curItem.contenuto}</div>
+                <div className="accordion-collapse collapse show d-flex justify-content-between">
+                  {editId === curItem.id ? (
+                    <div className="w-100">
+                      <input
+                        className="form-control mb-1"
+                        placeholder="Modifica il titolo"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                      />
+                      <textarea
+                        className="form-control mb-1"
+                        placeholder="Modifica il contenuto"
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                      />
+                      <div className="text-center mb-2">
+                        <button
+                          className="btn btn-success mt-2"
+                          onClick={handleSave}
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="accordion-body">{curItem.contenuto}</div>
+                  )}
+                  {editId !== curItem.id && (
+                    <i
+                      className="bi bi-pencil btn btn-warning align-self-center mx-1"
+                      onClick={() => handleModify(curItem.id)}
+                    ></i>
+                  )}
                 </div>
               )}
             </div>
